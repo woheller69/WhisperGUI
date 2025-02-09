@@ -34,13 +34,18 @@ class WhisperGUI:
 
         self.output_window = scrolledtext.ScrolledText(self.root, wrap=tk.WORD)
         self.output_window.pack(side='top', fill='both', expand=True)
+        
+        start_button = tk.Button(self.root, text="Press & Hold while speaking")
+        start_button.pack()
 
-        generate_button = tk.Button(self.root, text="Stop Recording and Transcribe", command=self.generate)
-        start_button = tk.Button(self.root, text="Start Recording", command=self.start)
+        # Bind the button press and release events. <Button-1> is the event for a mouse button press. 1 refers to the left mouse button.
+        start_button.bind("<Button-1>", self.start)
+        start_button.bind("<ButtonRelease-1>", self.generate)
+        
+        
         exit_button = tk.Button(self.root, text="Exit", command=self.root.destroy)
 
         start_button.pack(side='left', padx=(20, 0))
-        generate_button.pack(side='left', padx=(20, 0))
         exit_button.pack(side='right', padx=(0, 20))
     
         self.new_whisper_session()
@@ -57,7 +62,7 @@ class WhisperGUI:
         # Capture audio from the microphone
         self.capture_audio()
 
-    def generate(self):
+    def generate(self, event):
         self.recording = False
         self.recording_thread.join()
             
@@ -81,7 +86,7 @@ class WhisperGUI:
             print(f"Error generating transcription: {e}")
             exit(1)
 
-    def start(self):
+    def start(self, event):
         if self.recording_thread is None:
             self.recording_thread = threading.Thread(target=self.init_record)
             self.recording_thread.start()
@@ -133,4 +138,3 @@ class WhisperGUI:
 if __name__ == "__main__":
     gui = WhisperGUI()
     typer.run(gui.run)
-
