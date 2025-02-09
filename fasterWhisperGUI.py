@@ -12,7 +12,6 @@ import time
 import pyaudio
 import numpy as np
 import librosa
-import tensorflow as tf
 from faster_whisper import WhisperModel
 
 
