@@ -34,18 +34,20 @@ class WhisperGUI:
         self.output_window = scrolledtext.ScrolledText(self.root, wrap=tk.WORD)
         self.output_window.pack(side='top', fill='both', expand=True)
         
+
         start_button = tk.Button(self.root, text="Press & Hold while speaking")
         start_button.pack()
 
         # Bind the button press and release events. <Button-1> is the event for a mouse button press. 1 refers to the left mouse button.
         start_button.bind("<Button-1>", self.start)
         start_button.bind("<ButtonRelease-1>", self.generate)
-        
+        save_button = tk.Button(self.root, text="Save", command=self.save_transcription)
         
         exit_button = tk.Button(self.root, text="Exit", command=self.root.destroy)
 
         start_button.pack(side='left', padx=(20, 0))
         exit_button.pack(side='right', padx=(0, 20))
+        save_button.pack(side='right', padx=(0, 20))
     
         self.new_whisper_session()
         
@@ -93,6 +95,15 @@ class WhisperGUI:
     def exit(self):
         del self.gpt4all_instance
         quit()
+        
+    def save_transcription(self):
+        text_content = self.output_window.get("1.0", "end-1c")
+        file_path = "whisper_output.txt"
+        
+        with open(file_path, "w") as file:
+            file.write(text_content)
+
+        print(f"Text saved to {file_path}")
 
     def on_closing(self):
         del self.gpt4all_instance
