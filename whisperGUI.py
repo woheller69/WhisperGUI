@@ -95,11 +95,9 @@ class WhisperGUI:
             self.recording_thread.start()
     
     def exit(self):
-        del self.gpt4all_instance
         quit()
 
     def on_closing(self):
-        del self.gpt4all_instance
         self.root.destroy()
         
     # Function to capture audio from the microphone
